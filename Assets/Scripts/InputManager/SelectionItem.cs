@@ -3,6 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
+public class Finger
+{
+    const int NULL_ID = -10;
+    int id;
+    Vector2 screenPos;
+
+    Finger(int newId, Vector2 newScreenPos)
+    {
+        id = newId;
+        screenPos = newScreenPos;
+    }
+}
 
 public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IPointerExitHandler
 {
@@ -19,6 +31,7 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     private bool isMonsterClick;
     private bool isBackClick; // Not really important right now
     private int pointerDownID;
+    private Finger[] fingers;
 
     private void Start()
     {
@@ -84,7 +97,7 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     private void PointerExitUp(PointerEventData eventData)
     {
         // Verification que fonctionne seulement sur le premier doigt est exit
-        if (pointerDownID != eventData.pointerId) { return; }  
+        if (pointerDownID != eventData.pointerId) { return; }
 
         RaycastHit2D[] hits = GetRaycast(eventData);
         Collider2D colliderClick = GetFirstClickable(hits);
@@ -108,7 +121,7 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
         isOnDrag = false;
         isBackClick = false;
-        isMonsterClick = false; 
+        isMonsterClick = false;
         pointerDownID = NULL_ID;
     }
 
