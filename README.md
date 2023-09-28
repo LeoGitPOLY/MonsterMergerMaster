@@ -1,2 +1,2 @@
 # MonsterMergerMaster
-Unity video game - Small project 
+Unity video game - Personnal project
