@@ -1,18 +1,27 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
+using System;
+
+[Serializable]
 public class Finger
 {
     const int NULL_ID = -10;
-    int id;
-    Vector2 screenPos;
 
-    Finger(int newId, Vector2 newScreenPos)
+    public int id;
+    public bool isDrag;
+
+    public EnumClikable typeClick;
+    public Vector2 lastPos;
+    public MonsterScript monsterSelected;
+
+    public Finger(int newId, Vector2 screenPos)
     {
         id = newId;
-        screenPos = newScreenPos;
+        lastPos = screenPos;
+        typeClick = EnumClikable.Other;
+        isDrag = false;
     }
 }
 
@@ -22,65 +31,106 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
     private const string TAG_CLICK = "Clickable";
     private const string TAG_BACK = "Background";
-    private const int NULL_ID = -10;
+    private const int MAX_FINGERS = 3;
+    private float DRAG_SENSIBILITY = 1.5f;
 
     private SelectionEvent instance;
-    private MonsterScript lastMonsterScript;
-
-    private bool isOnDrag;
-    private bool isMonsterClick;
-    private bool isBackClick; // Not really important right now
-    private int pointerDownID;
-    private Finger[] fingers;
+    private List<Finger> fingers;
 
     private void Start()
     {
         instance = SelectionEvent.instance;
-        isOnDrag = false;
-        pointerDownID = NULL_ID;
+        fingers = new List<Finger>();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        //Verification que "no finger is currently pressed" 
-        if (pointerDownID == NULL_ID) { pointerDownID = eventData.pointerId; } else { return; }
+        // Verification: Finger not already pressed or too many fingers
+        Finger fingerDown = getFingerFromList(eventData.pointerId);
+        if (fingerDown != null || fingers.Count >= MAX_FINGERS) { return; }
 
         RaycastHit2D[] hits = GetRaycast(eventData);
+
         Collider2D colliderClick = GetFirstClickable(hits);
         Collider2D colliderBack = GetFirstBack(hits);
+        Finger newFingerPressed = new Finger(eventData.pointerId, eventData.position);
 
         if (colliderClick != null)
         {
-            lastMonsterScript = colliderClick.gameObject.GetComponent<MonsterScript>();
-            instance.SetDragMonster(lastMonsterScript);
+            MonsterScript lastMonsterScript = colliderClick.gameObject.GetComponent<MonsterScript>();
 
-            isMonsterClick = true;
-            // printMobile("pointerDownMonster");
+            newFingerPressed.monsterSelected = lastMonsterScript;
+            newFingerPressed.typeClick = EnumClikable.Monster;
         }
         else if (colliderBack != null)
         {
-            instance.DragBackground(GetCameraPos2D(eventData.position), true);
-            // printMobile("pointerDownBack");
-            isBackClick = true;
+            instance.SetDragBackground(eventData.pointerId, true);
+            newFingerPressed.typeClick = EnumClikable.Background;
         }
+
+        fingers.Add(newFingerPressed);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        // Verification que fonctionne seulement sur le premier doigt est drag
-        if (pointerDownID != eventData.pointerId) { return; }
+        // Verification: Finger is already pressed
+        Finger fingerDown = getFingerFromList(eventData.pointerId);
+        if (fingerDown == null) { return; }
 
-        if (isMonsterClick)
+        //Verification dragSensibility
+        if (isInThreeshold(eventData.position, fingerDown.lastPos)) { return; }
+
+        switch (fingerDown.typeClick)
         {
-            //DRAG THE MONSTER
-            instance.DragMonster(GetCameraPos2D(eventData.position));
-        }
-        else if (isBackClick)
-        {
-            //MOVE THE BACKGROUND (CAMERA)
+            case EnumClikable.Monster:
+                //FIRST TIME DRAG MONSTER:
+                if (!fingerDown.isDrag)
+                    instance.SetDragMonster(fingerDown.monsterSelected, eventData.pointerId, true);
+
+                //DRAG THE MONSTER:
+                instance.DragMonster(eventData.position, fingerDown.id);
+                break;
+            case EnumClikable.Background:
+                //MOVE THE BACKGROUND (CAMERA)
+                instance.DragBackground(fingerDown.id);
+                print("DRAGG: (finger: " + fingerDown.id + "; delta: " + (eventData.position - fingerDown.lastPos) + ")");
+                break;
+            case EnumClikable.Other:
+                break;
+            default:
+                break;
         }
 
-        isOnDrag = true;
+        fingerDown.lastPos = eventData.position;
+        fingerDown.isDrag = true;
+    }
+
+    private void PointerExitUp(PointerEventData eventData)
+    {
+        // Verification: Finger is already pressed
+        Finger fingerUp = getFingerFromList(eventData.pointerId);
+        if (fingerUp == null) { return; }
+
+        switch (fingerUp.typeClick)
+        {
+            case EnumClikable.Monster:
+                //SELECTION MONSTER (end)
+                if (!fingerUp.isDrag)
+                    instance.SelectionMonster(fingerUp.monsterSelected);
+                //DRAG MONSTER (end)
+                else
+                    instance.SetDragMonster(fingerUp.monsterSelected, fingerUp.id, false);
+                break;
+
+            case EnumClikable.Background:
+                instance.SetDragBackground(fingerUp.id, false);
+                break;
+
+            case EnumClikable.Other:
+                break;
+        }
+
+        fingers.Remove(fingerUp);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -93,36 +143,15 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         PointerExitUp(eventData);
     }
 
-    //PRIVATE FONCTIONS:
-    private void PointerExitUp(PointerEventData eventData)
+    //PRIVATE LOGIC METHODES:
+    private Finger getFingerFromList(int newFingerID)
     {
-        // Verification que fonctionne seulement sur le premier doigt est exit
-        if (pointerDownID != eventData.pointerId) { return; }
-
-        RaycastHit2D[] hits = GetRaycast(eventData);
-        Collider2D colliderClick = GetFirstClickable(hits);
-
-        if (colliderClick != null && !isOnDrag)
+        foreach (Finger item in fingers)
         {
-            //STATE: Le doigt est leve sans avoir ete drag (selection d'un monstre)
-            MonsterScript monsterScript = colliderClick.gameObject.GetComponent<MonsterScript>();
-            // printMobile("pointerUpSansDrag");
-
-            if (lastMonsterScript == monsterScript)
-                instance.SelectionMonster(monsterScript);
+            if (item.id == newFingerID)
+                return item;
         }
-        else
-        {
-            //STATE: Le doigt est leve et a ete drag (sois deplacement camera ou drag monstre)
-            instance.DragBackground(GetCameraPos2D(eventData.position), false);
-            // printMobile("pointerUpAvecDrag");
-            lastMonsterScript = null;
-        }
-
-        isOnDrag = false;
-        isBackClick = false;
-        isMonsterClick = false;
-        pointerDownID = NULL_ID;
+        return null;
     }
 
     private RaycastHit2D[] GetRaycast(PointerEventData eventData)
@@ -155,10 +184,10 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         return null;
     }
 
-    private Vector2 GetCameraPos2D(Vector2 clickPosition)
+    private bool isInThreeshold(Vector2 newPosition, Vector2 oldPosition)
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(clickPosition);
-        return new Vector2(mousePos.x, mousePos.y);
+        return (MathF.Abs(newPosition.x - oldPosition.x) < DRAG_SENSIBILITY)
+            && (MathF.Abs(newPosition.y - oldPosition.y) < DRAG_SENSIBILITY);
     }
 
     private void printMobile(string text)

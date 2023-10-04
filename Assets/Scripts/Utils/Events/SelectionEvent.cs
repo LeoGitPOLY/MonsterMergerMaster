@@ -13,27 +13,36 @@ public class SelectionEvent : MonoBehaviour
             Destroy(gameObject);
     }
 
+    //MONSTER EVENTS
     public event Action<MonsterScript> onSelectionMonster;
     public void SelectionMonster(MonsterScript monsterScript)
     {
         onSelectionMonster?.Invoke(monsterScript);
     }
 
-    public event Action<MonsterScript> onSetDragMonster;
-    public void SetDragMonster(MonsterScript monsterScript)
+    public event Action<MonsterScript, int, bool> onSetDragMonster;
+    public void SetDragMonster(MonsterScript monsterScript, int id, bool isAdded)
     {
-        onSetDragMonster?.Invoke(monsterScript);
+        onSetDragMonster?.Invoke(monsterScript, id, isAdded);
     }
 
-    public event Action<Vector2> onDragMonster;
-    public void DragMonster(Vector2 newPosition)
+    public event Action<Vector2, int> onDragMonster;
+    public void DragMonster(Vector2 newPosition, int id)
     {
-        onDragMonster?.Invoke(newPosition);
+        onDragMonster?.Invoke(newPosition, id);
     }
 
-    public event Action<Vector2, bool> onDragBackground;
-    public void DragBackground(Vector2 newPos, bool isDragable)
+
+    //BACK GROUND EVENTS
+    public event Action<int, bool> onSetDragBackground;
+    public void SetDragBackground(int id, bool isAdded)
     {
-        onDragBackground?.Invoke(newPos, isDragable);
+        onSetDragBackground?.Invoke(id, isAdded);
+    }
+
+    public event Action<int> onDragBackground;
+    public void DragBackground(int id)
+    {
+        onDragBackground?.Invoke(id);
     }
 }

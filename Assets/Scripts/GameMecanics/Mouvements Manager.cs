@@ -4,42 +4,46 @@ using UnityEngine;
 
 public class MouvementsManager : MonoBehaviour
 {
-    [SerializeField] private float deadZone = 0.3f;
-
-    private MonsterScript monsterToDrag;
+    private List<(MonsterScript, int)> monsterToDrags;
+    int i = 0;
+    private Camera cameraWorld;
 
     // Start is called before the first frame update
     void Start()
     {
         SelectionEvent.instance.onSetDragMonster += SetMonsterToDrag;
         SelectionEvent.instance.onDragMonster += DragMonster;
+        cameraWorld = Camera.main;
+
+        monsterToDrags = new List<(MonsterScript, int)>();
     }
 
-    private void SetMonsterToDrag(MonsterScript monsterScript)
+    private void SetMonsterToDrag(MonsterScript monsterScript, int id, bool isAdded)
     {
-        monsterToDrag = monsterScript;
+        if (isAdded)
+            monsterToDrags.Add((monsterScript, id));
+        else
+            monsterToDrags.Remove((monsterScript, id));
     }
 
-    private void DragMonster(Vector2 newPositon)
+    private void DragMonster(Vector2 newPositon, int id)
     {
-        if (monsterToDrag == null)
-            return;
+        MonsterScript monsterToDrag = getMonsterScriptByID(id);
+        if (monsterToDrag == null) { return; }
 
-        //if (!IsFingerClose(newPositon))
-        //    return;
+        newPositon = cameraWorld.ScreenToWorldPoint(newPositon);
 
         //Might want to add some smothing to that (if time)
         monsterToDrag.gameObject.transform.position = newPositon;
     }
 
-    private bool IsFingerClose(Vector2 newPosition) 
+    private MonsterScript getMonsterScriptByID(int id)
     {
-        bool isLowerX = newPosition.x < monsterToDrag.transform.position.x + deadZone;
-        bool isLowerY = newPosition.y < monsterToDrag.transform.position.y + deadZone;
-        bool isUpperX = newPosition.x > monsterToDrag.transform.position.x - deadZone; 
-        bool isUpperY = newPosition.y > monsterToDrag.transform.position.y - deadZone;
-
-
-        return monsterToDrag.transform.position.x < newPosition.x + deadZone;
+        foreach ((MonsterScript, int) item in monsterToDrags)
+        {
+            if (item.Item2 == id)
+                return item.Item1;
+        }
+        return null;
     }
 }

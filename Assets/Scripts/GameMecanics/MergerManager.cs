@@ -6,51 +6,54 @@ public class MergerManager : MonoBehaviour
 {
     [SerializeField] private GameObject monsterPrefab;
     [SerializeField] private Transform parentMonster;
+    private const string TAG_CLICK = "Clickable";
 
-    private MonsterScript[] selectionMonsters = new MonsterScript[2];
+    [Header("VARIABLES:")]
+    [SerializeField] private float detectionRadius;
 
+    private MonsterScript selectedMonster;
 
     private void Start()
     {
-        SelectionEvent.instance.onSelectionMonster += newSelectionMonster;
+        SelectionEvent.instance.onSetDragMonster += DropedMonster;
     }
 
-    private void newSelectionMonster(MonsterScript monsterScript)
+    private void DropedMonster(MonsterScript monsterScript, int id, bool isAdded)
     {
-        if (monsterScript == selectionMonsters[0])
-            return;
+        //Only detect on release
+        if (isAdded) { return; }
 
-        selectionMonsters[1]?.setMonsterSelected(false);
+        Vector3 droppedPos = monsterScript.gameObject.transform.position;
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(droppedPos, detectionRadius);
 
-        selectionMonsters[1] = selectionMonsters[0];
-        selectionMonsters[0] = monsterScript;
-
-        selectionMonsters[0]?.setMonsterSelected(true);
+        foreach (Collider2D collider in colliders)
+        {
+            MonsterScript otherMonster = collider.gameObject.GetComponent<MonsterScript>();
+            if (otherMonster != null && otherMonster != monsterScript)
+            {
+                MergeMonster(monsterScript, otherMonster);
+                return;
+            }
+        }
     }
 
-    public void MergeMonster()
+    public void MergeMonster(MonsterScript monster1, MonsterScript monster2)
     {
-        MonsterScript monster1 = selectionMonsters[0];
-        MonsterScript monster2 = selectionMonsters[1];
-
         if (monster1 == null || monster2 == null)
             return;
-
+        
         if (!monster1.MonsterIsSameLevel(monster2))
             return;
-
+        
         int newLevel = monster1.getMonsterStats().getLevel() + 1;
         List<TypeMonster> newType = MonsterStats.mergeType(monster1.getMonsterStats().GetTypeMonsters(), monster2.getMonsterStats().GetTypeMonsters());
         MonsterStats newStats = new MonsterStats(newLevel, newType);
-
+        
         GameObject newMonster = Instantiate(monsterPrefab, parentMonster);
         newMonster.GetComponent<MonsterScript>().setNewInfoMonster(newStats);
-
+        
         monster1.deleteItSelf();
         monster2.deleteItSelf();
-
-        selectionMonsters[0] = null;
-        selectionMonsters[1] = null;
     }
 
     public void createMonster()
@@ -64,5 +67,18 @@ public class MergerManager : MonoBehaviour
 
         GameObject newMonster = Instantiate(monsterPrefab, parentMonster);
         newMonster.GetComponent<MonsterScript>().setNewInfoMonster(newStats);
+    }
+    //OLD METHODE TO SELECT MONSTER (might use it later)
+    private void newSelectionMonster(MonsterScript monsterScript)
+    {
+        //if (monsterScript == selectionMonsters[0])
+        //    return;
+
+        //selectionMonsters[1]?.setMonsterSelected(false);
+
+        //selectionMonsters[1] = selectionMonsters[0];
+        //selectionMonsters[0] = monsterScript;
+
+        //selectionMonsters[0]?.setMonsterSelected(true);
     }
 }
