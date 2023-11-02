@@ -14,7 +14,7 @@ public class Finger
 
     public EnumClikable typeClick;
     public Vector2 lastPos;
-    public MonsterScript monsterSelected;
+    public MonsterStats monsterSelected;
 
     public Finger(int newId, Vector2 screenPos)
     {
@@ -57,7 +57,7 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
         if (colliderClick != null)
         {
-            MonsterScript lastMonsterScript = colliderClick.gameObject.GetComponent<MonsterScript>();
+            MonsterStats lastMonsterScript = colliderClick.gameObject.GetComponent<MonsterStats>();
 
             newFingerPressed.monsterSelected = lastMonsterScript;
             newFingerPressed.typeClick = EnumClikable.Monster;
@@ -93,7 +93,7 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             case EnumClikable.Background:
                 //MOVE THE BACKGROUND (CAMERA)
                 instance.DragBackground(fingerDown.id);
-                print("DRAGG: (finger: " + fingerDown.id + "; delta: " + (eventData.position - fingerDown.lastPos) + ")");
+
                 break;
             case EnumClikable.Other:
                 break;
@@ -179,7 +179,6 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         {
             if (item.collider != null && item.collider.gameObject.tag == TAG_BACK)
                 return item.collider;
-
         }
         return null;
     }

@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1595092434570172176}
   - component: {fileID: 5361567837386043897}
   - component: {fileID: 1400225509297947524}
-  - component: {fileID: 2138040661504749778}
+  - component: {fileID: 4670607878895259302}
   m_Layer: 0
   m_Name: MonstrePrefab
   m_TagString: Clickable
@@ -193,7 +193,7 @@ MonoBehaviour:
   - {fileID: -1126502038, guid: fa7e2c370a34ea64597be759adec1357, type: 3}
   - {fileID: 657330947, guid: fa7e2c370a34ea64597be759adec1357, type: 3}
   - {fileID: -1114755719, guid: fa7e2c370a34ea64597be759adec1357, type: 3}
---- !u!114 &2138040661504749778
+--- !u!114 &4670607878895259302
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -202,9 +202,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1223873497013086438}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61b87ef5560aa9b47aed7b930a90a4b1, type: 3}
+  m_Script: {fileID: 11500000, guid: ab7c7d8c0cbf25d439318e5a9a89402e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  level: 0
+  type: 0
+  centeredPosition: {x: 0, y: 0}
+  getter: {fileID: 0}
 --- !u!1 &1279060044148901119
 GameObject:
   m_ObjectHideFlags: 0

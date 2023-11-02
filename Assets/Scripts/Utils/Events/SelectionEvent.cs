@@ -14,16 +14,16 @@ public class SelectionEvent : MonoBehaviour
     }
 
     //MONSTER EVENTS
-    public event Action<MonsterScript> onSelectionMonster;
-    public void SelectionMonster(MonsterScript monsterScript)
+    public event Action<MonsterStats> onSelectionMonster;
+    public void SelectionMonster(MonsterStats monsterStats)
     {
-        onSelectionMonster?.Invoke(monsterScript);
+        onSelectionMonster?.Invoke(monsterStats);
     }
 
-    public event Action<MonsterScript, int, bool> onSetDragMonster;
-    public void SetDragMonster(MonsterScript monsterScript, int id, bool isAdded)
+    public event Action<MonsterStats, int, bool> onSetDragMonster;
+    public void SetDragMonster(MonsterStats monsterStats, int id, bool isAdded)
     {
-        onSetDragMonster?.Invoke(monsterScript, id, isAdded);
+        onSetDragMonster?.Invoke(monsterStats, id, isAdded);
     }
 
     public event Action<Vector2, int> onDragMonster;

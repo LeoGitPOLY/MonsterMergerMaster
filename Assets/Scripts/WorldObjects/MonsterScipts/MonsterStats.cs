@@ -1,46 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterStats
+public class MonsterStats : MonoBehaviour
 {
-    private int level;
-    private List<TypeMonster> types;
+    public int level;
+    public TypeMonster type;
+    public Vector2 centeredPosition;
+    public EasyComponentsGetter getter;
+   
+    //METHODE TO BE REMOVE!! (Allows dragged Monster to work)
+    private void Start()
+    {
+        level = 1;
+        type = TypeMonster.MonsterRed;
+        getter = GetComponent<EasyComponentsGetter>();
+        MonsterScript.setMonsterVisual(this);
+    }
 
-    public MonsterStats(int newLevel = 1, List<TypeMonster> newTypes = null )
+    public MonsterStats(int newLevel = 1, TypeMonster newType = TypeMonster.MonsterRed)
     {
         level = newLevel;
-        types = new List<TypeMonster>();
-
-        types = mergeType(types, newTypes);
+        type = newType;
+        centeredPosition = Vector2.zero;
+        getter = GetComponent<EasyComponentsGetter>();
     }
 
-
-    public int getLevel()
-    {
-        return level;
-    }
-
-    public List<TypeMonster> GetTypeMonsters()
-    {
-        return types;
-    }
-
-    public bool containType(TypeMonster type)
-    {
-        return types.Contains(type);
-    }
-    public static List<TypeMonster> mergeType(List<TypeMonster> addedType1, List<TypeMonster> addedType2)
-    {
-        if (addedType1 == null || addedType2 == null)
-            return null;
-
-        foreach (TypeMonster item in addedType2)
-        {
-            if (!addedType1.Contains(item))
-                addedType1.Add(item);
-        }
-
-        return addedType1;
-    }
 }

@@ -2,53 +2,80 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterScript : MonoBehaviour
+public static class MonsterScript
 {
-    private MonsterStats stats;
-    private EasyComponentsGetter getter;
-
-    private void Awake()
+    //MAIN LOGIC MONSTER FUNTIONS:
+    public static void GenerateMoney(MonsterStats mStats)
     {
-        getter = GetComponent<EasyComponentsGetter>();
     }
-
-    // Start is called before the first frame update
-    void Start()
+    public static void setMonsterVisual(MonsterStats mStats)
     {
-        if (stats == null)
-            setNewInfoMonster(new MonsterStats(1, new List<TypeMonster>() { TypeMonster.MonsterRed }));
-    }
-
-    public void setMonsterSelected(bool isSelected)
-    {
-        getter.getGameObject(0).SetActive(isSelected);
-    }
-
-    public void setNewInfoMonster(MonsterStats newStats)
-    {
-        stats = newStats;
+        EasyComponentsGetter getter = mStats.getter;
+        TypeMonster type = mStats.type;
+        int level = mStats.level;
 
         //Will be modify with the real skins
-        getter.getGameObject(6).GetComponent<SpriteRenderer>().sprite = getter.getSprite(newStats.getLevel()-1);
-        getter.setActiveGameObject(2, newStats.containType(TypeMonster.MonsterRed));
-        getter.setActiveGameObject(3, newStats.containType(TypeMonster.MonsterBlue));
-        getter.setActiveGameObject(4, newStats.containType(TypeMonster.MonsterGreen));
-        getter.setActiveGameObject(5, newStats.containType(TypeMonster.MonsterYellow));
+        getter.getGameObject(6).GetComponent<SpriteRenderer>().sprite = getter.getSprite(level - 1);
+        getter.setActiveGameObject(2, type == TypeMonster.MonsterRed);
+        getter.setActiveGameObject(3, type == TypeMonster.MonsterBlue);
+        getter.setActiveGameObject(4, type == TypeMonster.MonsterGreen);
+        getter.setActiveGameObject(5, type == TypeMonster.MonsterYellow);
+    }
+    public static void Upgrade(MonsterStats mStats)
+    {
+        mStats.level++;
+
+        //Show the changes:
+        setMonsterVisual(mStats);
     }
 
-    public bool MonsterIsSameLevel(MonsterScript otherMonster)
+
+    // LOGIC MONSTER FUNCTIONS:
+    public static void DeleteMonster(MonsterStats mStats)
     {
-        return stats.getLevel() == otherMonster.stats.getLevel();
+        Object.Destroy(mStats.gameObject);
+    }
+    public static void SetStatsMonster(MonsterStats mStats, MonsterStats mStatsNew)
+    {
+        mStats.level = mStatsNew.level;
+        mStats.type = mStatsNew.type;
+        mStats.centeredPosition = mStatsNew.centeredPosition;
+
+        //Show the changes:
+        CenteredMonster(mStats, mStats.centeredPosition);
+        setMonsterVisual(mStats);
+    }
+    public static void CenteredMonster(MonsterStats mStats, Vector2 newCenteredPosition)
+    {
+        mStats.centeredPosition = newCenteredPosition;
+        mStats.gameObject.transform.position = mStats.centeredPosition;
     }
 
-    public MonsterStats getMonsterStats()
+
+    // VERIFICATION MONSTER FUNCTIONS:
+    public static bool IsSameLevel(MonsterStats m1Stats, MonsterStats m2Stats)
     {
-        return stats;
+        return m1Stats.level == m2Stats.level;
+    }
+    public static bool IsSameType(MonsterStats m1Stats, MonsterStats m2Stats)
+    {
+        return m1Stats.type == m2Stats.type;
     }
 
-    public void deleteItSelf()
+
+    // OLD METHODE: to merge different monster with different type
+    public static List<TypeMonster> mergeType_OLD(List<TypeMonster> addedType1, List<TypeMonster> addedType2)
     {
-        Destroy(this.gameObject);
+        if (addedType1 == null || addedType2 == null)
+            return null;
+
+        foreach (TypeMonster item in addedType2)
+        {
+            if (!addedType1.Contains(item))
+                addedType1.Add(item);
+        }
+
+        return addedType1;
     }
 
 }

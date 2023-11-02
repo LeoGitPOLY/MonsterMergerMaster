@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class MouvementsManager : MonoBehaviour
 {
-    private List<(MonsterScript, int)> monsterToDrags;
-    int i = 0;
+    private List<(MonsterStats, int)> monsterToDrags;
     private Camera cameraWorld;
 
     // Start is called before the first frame update
@@ -15,20 +14,20 @@ public class MouvementsManager : MonoBehaviour
         SelectionEvent.instance.onDragMonster += DragMonster;
         cameraWorld = Camera.main;
 
-        monsterToDrags = new List<(MonsterScript, int)>();
+        monsterToDrags = new List<(MonsterStats, int)>();
     }
 
-    private void SetMonsterToDrag(MonsterScript monsterScript, int id, bool isAdded)
+    private void SetMonsterToDrag(MonsterStats monsterStats, int id, bool isAdded)
     {
         if (isAdded)
-            monsterToDrags.Add((monsterScript, id));
+            monsterToDrags.Add((monsterStats, id));
         else
-            monsterToDrags.Remove((monsterScript, id));
+            monsterToDrags.Remove((monsterStats, id));
     }
 
     private void DragMonster(Vector2 newPositon, int id)
     {
-        MonsterScript monsterToDrag = getMonsterScriptByID(id);
+        MonsterStats monsterToDrag = getMonsterStatsByID(id);
         if (monsterToDrag == null) { return; }
 
         newPositon = cameraWorld.ScreenToWorldPoint(newPositon);
@@ -37,9 +36,9 @@ public class MouvementsManager : MonoBehaviour
         monsterToDrag.gameObject.transform.position = newPositon;
     }
 
-    private MonsterScript getMonsterScriptByID(int id)
+    private MonsterStats getMonsterStatsByID(int id)
     {
-        foreach ((MonsterScript, int) item in monsterToDrags)
+        foreach ((MonsterStats, int) item in monsterToDrags)
         {
             if (item.Item2 == id)
                 return item.Item1;
