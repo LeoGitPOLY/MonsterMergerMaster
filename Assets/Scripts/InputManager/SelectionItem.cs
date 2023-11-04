@@ -14,7 +14,7 @@ public class Finger
 
     public EnumClikable typeClick;
     public Vector2 lastPos;
-    public MonsterStats monsterSelected;
+    public MonsterScript monsterSelected;
 
     public Finger(int newId, Vector2 screenPos)
     {
@@ -57,7 +57,7 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
         if (colliderClick != null)
         {
-            MonsterStats lastMonsterScript = colliderClick.gameObject.GetComponent<MonsterStats>();
+            MonsterScript lastMonsterScript = colliderClick.gameObject.GetComponent<MonsterScript>();
 
             newFingerPressed.monsterSelected = lastMonsterScript;
             newFingerPressed.typeClick = EnumClikable.Monster;

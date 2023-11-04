@@ -13,4 +13,9 @@ public class SpawnEvent : MonoBehaviour
             Destroy(gameObject);
     }
 
+    public event Action<TypeMonster, int, int> onSpawnMonsterInArena;
+    public void SpawnMonsterInArena(TypeMonster type, int level, int indexArena)
+    {
+        onSpawnMonsterInArena?.Invoke(type, level, indexArena);
+    }
 }

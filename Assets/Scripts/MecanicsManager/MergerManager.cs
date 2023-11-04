@@ -16,7 +16,7 @@ public class MergerManager : MonoBehaviour
         SelectionEvent.instance.onSetDragMonster += DropedMonster;
     }
 
-    private void DropedMonster(MonsterStats monsterStats, int id, bool isAdded)
+    private void DropedMonster(MonsterScript monsterStats, int id, bool isAdded)
     {
         //Only detect on release
         if (isAdded) { return; }
@@ -26,7 +26,7 @@ public class MergerManager : MonoBehaviour
 
         foreach (Collider2D collider in colliders)
         {
-            MonsterStats otherMonster = collider.gameObject.GetComponent<MonsterStats>();
+            MonsterScript otherMonster = collider.gameObject.GetComponent<MonsterScript>();
             if (otherMonster != null && otherMonster != monsterStats)
             {
                 MergeMonster(monsterStats, otherMonster);
@@ -35,31 +35,20 @@ public class MergerManager : MonoBehaviour
         }
     }
 
-    public void MergeMonster(MonsterStats monster1, MonsterStats monster2)
+    public void MergeMonster(MonsterScript monster1, MonsterScript monster2)
     {
         if (monster1 == null || monster2 == null) { return; }
 
         //VERIFICATION: Monster same level
-        if (!MonsterScript.IsSameLevel(monster1, monster2)) { return; }
+        if (!MonsterStaticScript.IsSameLevel(monster1, monster2)) { return; }
 
         //VERIFICATION: Monster same type
-        if (!MonsterScript.IsSameType(monster1, monster2)) { return; }
+        if (!MonsterStaticScript.IsSameType(monster1, monster2)) { return; }
 
-        MonsterScript.Upgrade(monster1);
-        MonsterScript.DeleteMonster(monster2);
+        MonsterStaticScript.Upgrade(monster1);
+        MonsterStaticScript.DeleteMonster(monster2);
     }
-
-    // WILL BE IN THE SPAWN MANAGER SCRIPT
-    public void createMonster()
-    {
-        TypeMonster type = (TypeMonster)Random.Range(0, 4);
-
-
-        MonsterStats newStats = new MonsterStats(1, type);
-        GameObject newMonster = Instantiate(monsterPrefab, parentMonster);
-
-        //newMonster.GetComponent<MonsterScript>().SetStats(newStats);
-    }
+   
 
     //OLD METHODE TO SELECT MONSTER (might use it later)
     /* private void newSelectionMonster(MonsterScript monsterScript)

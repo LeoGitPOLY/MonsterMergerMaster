@@ -151,7 +151,7 @@ public class CameraMovement : MonoBehaviour
         }
 
         // Get container around island (camera bonderie)
-        bonderie = prefabHolder.getGOFromArena(newArenaIndex, 0).GetComponent<Transform>();
+        bonderie = prefabHolder.getGameObjectFromArena(newArenaIndex, 0).GetComponent<Transform>();
 
         // Calculate max and min zoom value;
         float aspectRation = (float)Screen.width / Screen.height;

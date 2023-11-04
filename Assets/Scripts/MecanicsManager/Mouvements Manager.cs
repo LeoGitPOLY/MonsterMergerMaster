@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MouvementsManager : MonoBehaviour
 {
-    private List<(MonsterStats, int)> monsterToDrags;
+    private List<(MonsterScript, int)> monsterToDrags;
     private Camera cameraWorld;
 
     // Start is called before the first frame update
@@ -14,10 +14,10 @@ public class MouvementsManager : MonoBehaviour
         SelectionEvent.instance.onDragMonster += DragMonster;
         cameraWorld = Camera.main;
 
-        monsterToDrags = new List<(MonsterStats, int)>();
+        monsterToDrags = new List<(MonsterScript, int)>();
     }
 
-    private void SetMonsterToDrag(MonsterStats monsterStats, int id, bool isAdded)
+    private void SetMonsterToDrag(MonsterScript monsterStats, int id, bool isAdded)
     {
         if (isAdded)
             monsterToDrags.Add((monsterStats, id));
@@ -27,7 +27,7 @@ public class MouvementsManager : MonoBehaviour
 
     private void DragMonster(Vector2 newPositon, int id)
     {
-        MonsterStats monsterToDrag = getMonsterStatsByID(id);
+        MonsterScript monsterToDrag = getMonsterStatsByID(id);
         if (monsterToDrag == null) { return; }
 
         newPositon = cameraWorld.ScreenToWorldPoint(newPositon);
@@ -36,9 +36,9 @@ public class MouvementsManager : MonoBehaviour
         monsterToDrag.gameObject.transform.position = newPositon;
     }
 
-    private MonsterStats getMonsterStatsByID(int id)
+    private MonsterScript getMonsterStatsByID(int id)
     {
-        foreach ((MonsterStats, int) item in monsterToDrags)
+        foreach ((MonsterScript, int) item in monsterToDrags)
         {
             if (item.Item2 == id)
                 return item.Item1;

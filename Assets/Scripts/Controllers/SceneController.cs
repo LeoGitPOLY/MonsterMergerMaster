@@ -31,7 +31,7 @@ public class SceneController : MonoBehaviour
         arenaEvent.onBufferFullChangeArena += ArenaBufferFull;
         arenaEvent.onChangeArena += callbackCamera;
     }
-
+ 
     private void loadNewFarm()
     {
         arenaEvent.ChangeArena(wantedIndex, callback: false);

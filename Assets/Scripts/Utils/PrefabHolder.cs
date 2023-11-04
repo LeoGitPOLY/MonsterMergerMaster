@@ -9,8 +9,9 @@ public class PrefabHolder : MonoBehaviour
 
     [Header("Prefab Arena:")]
     [SerializeField] private List<GameObject> prefabArena;
+    [SerializeField] private GameObject prefabMonster;
 
-    private List<EasyComponentsGetter> getter;
+    private List<EasyComponentsGetter> getterArena;
 
     private void Awake()
     {
@@ -22,16 +23,20 @@ public class PrefabHolder : MonoBehaviour
 
     private void Start()
     {
-        getter = new List<EasyComponentsGetter>();
+        getterArena = new List<EasyComponentsGetter>();
 
         foreach (GameObject item in prefabArena)
         {
-            getter.Add(item.GetComponent<EasyComponentsGetter>());
+            getterArena.Add(item.GetComponent<EasyComponentsGetter>());
         }
     }
 
-    public GameObject getGOFromArena(int indexArena, int indexObjet)
+    public GameObject getGameObjectFromArena(int indexArena, int indexObjet)
     {
-        return getter[indexArena].getGameObject(indexObjet);
+        return getterArena[indexArena].getGameObject(indexObjet);
+    }
+    public GameObject getMonsterPrefab()
+    {
+        return prefabMonster;
     }
 }
