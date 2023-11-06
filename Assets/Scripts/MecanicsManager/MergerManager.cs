@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class MergerManager : MonoBehaviour
 {
-    [SerializeField] private GameObject monsterPrefab;
-    [SerializeField] private Transform parentMonster;
-
     [Header("VARIABLES:")]
     [SerializeField] private float detectionRadius;
 

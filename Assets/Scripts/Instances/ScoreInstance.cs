@@ -8,6 +8,7 @@ public class ScoreInstance : MonoBehaviour
     public static ScoreInstance instance = null;
 
     public int currency;
+    public List<MonsterData>[] saveableMonsterDatas;
 
 
     private void Awake()
@@ -51,6 +52,7 @@ public class ScoreInstance : MonoBehaviour
     //SAVE METHODE:
     public void Save()
     {
+        saveableMonsterDatas = MonsterStaticScript.getMonsterDataFormWorld();
         SaveSystem.saveScore(instance);
     }
 
@@ -73,6 +75,13 @@ public class ScoreInstance : MonoBehaviour
     public void loadNew()
     {
         currency = 100;
+
+        saveableMonsterDatas = new List<MonsterData>[5];
+        saveableMonsterDatas[0] = new List<MonsterData>();
+        saveableMonsterDatas[1] = new List<MonsterData>();
+        saveableMonsterDatas[2] = new List<MonsterData>();
+        saveableMonsterDatas[3] = new List<MonsterData>();
+        saveableMonsterDatas[4] = new List<MonsterData>();
     }
     public void loadDevelloperMode()
     {
@@ -88,6 +97,13 @@ public class ScoreInstance : MonoBehaviour
         ScoreData data = SaveSystem.loadScore();
 
         currency = data.s_currency;
+
+        saveableMonsterDatas = new List<MonsterData>[5];
+        saveableMonsterDatas[0] = data.dataArena_1;
+        saveableMonsterDatas[1] = data.dataArena_2;
+        saveableMonsterDatas[2] = data.dataArena_3;
+        saveableMonsterDatas[3] = data.dataArena_4;
+        saveableMonsterDatas[4] = data.dataArena_final;
     }
 
 }

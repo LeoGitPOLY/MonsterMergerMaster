@@ -341,6 +341,73 @@ MonoBehaviour:
   isLoad: 1
   develloperMode: 0
   interpolationPeriod: 180
+--- !u!1001 &140412360
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1192711241}
+    m_Modifications:
+    - target: {fileID: 6823704198564702514, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 26.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6823704198564702514, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -46.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6823704198564702514, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6823704198564702514, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6823704198564702514, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6823704198564702514, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6823704198564702514, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6823704198564702514, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6823704198564702514, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6823704198564702514, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8546830463517528949, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_Name
+      value: ArenaFarm#Final
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+--- !u!4 &140412361 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6823704198564702514, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+  m_PrefabInstance: {fileID: 140412360}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &140412362 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8546830463517528949, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+  m_PrefabInstance: {fileID: 140412360}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &164192252
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,6 +457,7 @@ MonoBehaviour:
   - {fileID: 1366221019}
   - {fileID: 1087568052}
   - {fileID: 124165088}
+  - {fileID: 140412362}
   prefabMonster: {fileID: 1223873497013086438, guid: 31ad3fa4d0e678e4ca8a257a0a60e671, type: 3}
 --- !u!1 &297430677
 GameObject:
@@ -847,9 +915,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2110923084}
-        m_TargetAssemblyTypeName: MergerManager, Assembly-CSharp
-        m_MethodName: createMonster
+      - m_Target: {fileID: 2110923086}
+        m_TargetAssemblyTypeName: SpawnManager, Assembly-CSharp
+        m_MethodName: callableMethode
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2228,6 +2296,7 @@ Transform:
   - {fileID: 1366221020}
   - {fileID: 1087568053}
   - {fileID: 124165090}
+  - {fileID: 140412361}
   - {fileID: 1150722953}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2974,8 +3043,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1823034013}
-  - component: {fileID: 1823034014}
   - component: {fileID: 1823034016}
+  - component: {fileID: 1823034014}
   - component: {fileID: 1823034015}
   m_Layer: 0
   m_Name: Controller
@@ -3553,9 +3622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cefdd489cd21d7f418287ba4ab02551e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterPrefab: {fileID: 1223873497013086438, guid: 31ad3fa4d0e678e4ca8a257a0a60e671, type: 3}
-  parentMonster: {fileID: 6789441509211960355}
-  detectionRadius: 0.2
+  detectionRadius: 0.6
 --- !u!114 &2110923085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3580,11 +3647,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6fab0295ddae094da9427a39b9c5e82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &6789441509211960355 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6624564754488849804, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
-  m_PrefabInstance: {fileID: 7207980039534457325}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7207980039534457325
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -6,8 +6,6 @@ public class SaveInstance : MonoBehaviour
 
     [SerializeField] private bool isLoad;
     [SerializeField] private bool develloperMode;
-
-    //Save by time
     [SerializeField] private float interpolationPeriod;
     private float time = 0.0f;
 
@@ -19,10 +17,7 @@ public class SaveInstance : MonoBehaviour
             Destroy(gameObject);
 
     }
-    private void Start()
-    {
-        loadScenePrincipal();
-    }
+
     void LateUpdate()
     {
         time += Time.deltaTime;
@@ -46,11 +41,10 @@ public class SaveInstance : MonoBehaviour
         }
     }
 
-    private void loadScenePrincipal()
+    public void loadScenePrincipal()
     {
         //WILL NEED TO BE SAVED AND LOAD
         EnumVersion version = VersionInstance.instance.Load();
-        print(version);
 
         if (isLoad)
         {

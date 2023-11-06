@@ -7,8 +7,7 @@ public class LateStartController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SpawnEvent.instance.SpawnMonsterInArena(TypeMonster.MonsterRed, 4, 0);
-
+        SpawnEvent.instance.SpawnMonsterInArena(TypeMonster.MonsterRed, 4, 4);
     }
 
 

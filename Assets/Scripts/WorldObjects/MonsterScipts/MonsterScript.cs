@@ -1,18 +1,19 @@
 using UnityEngine;
 
+[System.Serializable]
 public class MonsterData
 {
     public int level;
     public TypeMonster type;
-    public Vector2 centeredPosition;
+    public float[] centeredPosition;
 
     public MonsterData(int newLevel, TypeMonster newType)
     {
         level = newLevel;
         type = newType;
-        centeredPosition = Vector2.zero;
+        centeredPosition = new float[2];
     }
-    public MonsterData(int newLevel, TypeMonster newType, Vector2 newCenteredPosition)
+    public MonsterData(int newLevel, TypeMonster newType, float[] newCenteredPosition)
     {
         level = newLevel;
         type = newType;

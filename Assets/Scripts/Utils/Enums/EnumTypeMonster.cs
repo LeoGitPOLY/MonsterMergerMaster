@@ -7,5 +7,6 @@ public enum TypeMonster : int
     MonsterRed,
     MonsterBlue, 
     MonsterGreen,
-    MonsterYellow
+    MonsterYellow,
+    MonsterFinal
 }
