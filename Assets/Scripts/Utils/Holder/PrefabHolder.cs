@@ -9,7 +9,11 @@ public class PrefabHolder : MonoBehaviour
 
     [Header("Prefab Arena:")]
     [SerializeField] private List<GameObject> prefabArena;
+  
+    [Header("Prefab Monster:")]
     [SerializeField] private GameObject prefabMonster;
+    [SerializeField] private GameObject prefabEgg;
+    [SerializeField] private List<GameObject> prefabCurrency;
 
     private List<EasyComponentsGetter> getterArena;
 
@@ -31,6 +35,10 @@ public class PrefabHolder : MonoBehaviour
         }
     }
 
+    public GameObject getCurrencyFromArena(int indexArena)
+    {
+        return prefabCurrency[indexArena];
+    }
     public GameObject getGameObjectFromArena(int indexArena, int indexObjet)
     {
         return getterArena[indexArena].getGameObject(indexObjet);
@@ -38,5 +46,9 @@ public class PrefabHolder : MonoBehaviour
     public GameObject getMonsterPrefab()
     {
         return prefabMonster;
+    }
+    public GameObject getEggPrefab()
+    {
+        return prefabEgg;
     }
 }

@@ -61,6 +61,7 @@ Library: C:\UnityBuilder\MonsterMergerMaster\Temp\BurstOutput\tempburstlibs\arme
 --assembly-defines=mscorlib;
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\UnityBuilder\MonsterMergerMaster\Temp\Burst
+--debug=Full
 --key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.8f1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=C:\UnityBuilder\MonsterMergerMaster\Library\Burst
 --output=C:\UnityBuilder\MonsterMergerMaster\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_generated
@@ -129,6 +130,7 @@ Library: C:\UnityBuilder\MonsterMergerMaster\Temp\BurstOutput\tempburstlibs\arme
 --assembly-defines=mscorlib;
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\UnityBuilder\MonsterMergerMaster\Temp\Burst
+--debug=Full
 --key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.8f1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=C:\UnityBuilder\MonsterMergerMaster\Library\Burst
 --output=C:\UnityBuilder\MonsterMergerMaster\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_generated

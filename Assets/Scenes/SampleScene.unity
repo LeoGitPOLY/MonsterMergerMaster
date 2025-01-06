@@ -313,6 +313,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currency: 0
+  saveableMonsterDatas: []
+  nbCurrentMonster: 
 --- !u!114 &132357108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -338,7 +340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b63db985b1e549f439448e0005d1e5b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isLoad: 1
+  isLoad: 0
   develloperMode: 0
   interpolationPeriod: 180
 --- !u!1001 &140412360
@@ -393,6 +395,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: ArenaFarm#Final
       objectReference: {fileID: 0}
+    - target: {fileID: 9117120684631476771, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_Color.b
+      value: 0.1764418
+      objectReference: {fileID: 0}
+    - target: {fileID: 9117120684631476771, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_Color.g
+      value: 0.5754717
+      objectReference: {fileID: 0}
+    - target: {fileID: 9117120684631476771, guid: 7fdde0ce368b6d540b82c7f7adf1a956, type: 3}
+      propertyPath: m_Color.r
+      value: 0.570977
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -418,6 +432,7 @@ GameObject:
   m_Component:
   - component: {fileID: 164192253}
   - component: {fileID: 164192254}
+  - component: {fileID: 164192255}
   m_Layer: 0
   m_Name: Holders
   m_TagString: Untagged
@@ -459,6 +474,25 @@ MonoBehaviour:
   - {fileID: 124165088}
   - {fileID: 140412362}
   prefabMonster: {fileID: 1223873497013086438, guid: 31ad3fa4d0e678e4ca8a257a0a60e671, type: 3}
+  prefabEgg: {fileID: 1223873497013086438, guid: c479efcbcc190f641bc20a5354557cf3, type: 3}
+  prefabCurrency:
+  - {fileID: 3304458679558110232, guid: 34445feeefc51844a94baaebda86f40a, type: 3}
+  - {fileID: 3304458679558110232, guid: 34445feeefc51844a94baaebda86f40a, type: 3}
+  - {fileID: 3304458679558110232, guid: 34445feeefc51844a94baaebda86f40a, type: 3}
+  - {fileID: 3304458679558110232, guid: 34445feeefc51844a94baaebda86f40a, type: 3}
+--- !u!114 &164192255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 164192252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8c0c5d311666544db816d76972274d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cvsStats: {fileID: 4900000, guid: f44bb155afb9b984494d92616371969a, type: 3}
 --- !u!1 &297430677
 GameObject:
   m_ObjectHideFlags: 0
@@ -1567,7 +1601,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 000000008145e6ec290e663c
+  m_ApplyToSortingLayers: 000000008145e6ec290e663cb9eb0336
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -3046,6 +3080,7 @@ GameObject:
   - component: {fileID: 1823034016}
   - component: {fileID: 1823034014}
   - component: {fileID: 1823034015}
+  - component: {fileID: 1823034017}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -3102,6 +3137,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d88701f020eabb4082fe33457bc9958, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1823034017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823034012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3707493f5b6f38b41b270b3a681959d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1833830257

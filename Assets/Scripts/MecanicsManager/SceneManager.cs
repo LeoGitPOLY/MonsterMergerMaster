@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneController : MonoBehaviour
+public class SceneManager : MonoBehaviour
 {
     private const int MAX_INDEX = 3;
 

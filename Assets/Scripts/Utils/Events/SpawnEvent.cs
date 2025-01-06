@@ -18,4 +18,10 @@ public class SpawnEvent : MonoBehaviour
     {
         onSpawnMonsterInArena?.Invoke(type, level, indexArena);
     }
+
+    public event Action<TypeMonster, int, int> onSpawnEggInArena;
+    public void SpawnEggInArena(TypeMonster type, int level, int indexArena)
+    {
+        onSpawnEggInArena?.Invoke(type, level, indexArena);
+    }
 }

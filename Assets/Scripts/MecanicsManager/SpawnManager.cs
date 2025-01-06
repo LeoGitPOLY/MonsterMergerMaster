@@ -4,81 +4,95 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    PrefabHolder holder;
 
     float currentTime = 0f;
-    int numberSpawn = 0;
-    // Start is called before the first frame update
+
+    // Instance:
+    private PrefabHolder prefFolder;
+    private PoolSystem poolSystem;
+
     void Start()
     {
         SpawnEvent.instance.onSpawnMonsterInArena += SpawnMonsterInArena;
-        holder = PrefabHolder.instance;
+        SpawnEvent.instance.onSpawnEggInArena += SpawnEggInArena;
+        SelectionEvent.instance.onClickEgg += ClickOnEgg;
 
-        SpawnAllMonsterStart();
+        prefFolder = PrefabHolder.instance;
+        poolSystem = PoolSystem.instance;
+
+        SpawnAllEntityStart();
     }
     private void Update()
     {
         currentTime += Time.deltaTime;
 
-        if (currentTime > 1 && numberSpawn < 10)
+        if (currentTime > 1)
         {
-            /*SpawnMonsterInArena(TypeMonster.MonsterRed, 1, 0);
-            SpawnMonsterInArena(TypeMonster.MonsterGreen, 1, 1);
-            SpawnMonsterInArena(TypeMonster.MonsterBlue, 1, 2);
-            SpawnMonsterInArena(TypeMonster.MonsterYellow, 1, 3);
+            int level = Random.Range(1, 4);
+            SpawnEggInArena(TypeMonster.MonsterRed, level, 0);
+            SpawnEggInArena(TypeMonster.MonsterGreen, 1, 1);
+            SpawnEggInArena(TypeMonster.MonsterBlue, 1, 2);
+            SpawnEggInArena(TypeMonster.MonsterYellow, 1, 3);
             currentTime = 0;
-            numberSpawn++;*/
         }
     }
 
-    /// <summary>
-    /// TO DELETEEEE
-    /// </summary>
-    public void callableMethode()
+    private void SpawnAllEntityStart()
     {
-        float startTime = Time.time;
-        MonsterStaticScript.getMonsterDataFormWorld();
-        float endTime = Time.time;
+        List<MonsterData> monsterDatas = ScoreInstance.instance.saveableMonsterDatas;
+        Debug.LogError("Monster data load : " + monsterDatas.Count);
 
-        Debug.Log("Function took: " + (endTime - startTime));
-    }
-
-    private void SpawnAllMonsterStart()
-    {
-        List<MonsterData>[] monsterDatas = ScoreInstance.instance.saveableMonsterDatas;
-
-        for (int i = 0; i < monsterDatas.Length; i++)
+        foreach (var item in monsterDatas)
         {
-            foreach (var item in monsterDatas[i])
-            {
+            //Debug.LogError("ITEM: " + item.type);
+            if (item.asHatched)
                 SpawnMonsterInArena(item);
-            }
+            else
+                SpawnEggInArena(item);
         }
     }
+
+    // Private GameObjects Spawn
     private void SpawnMonsterInArena(MonsterData mdata)
     {
-        const int indexMonsterContener = 2;
-        GameObject monsterObj = Instantiate(holder.getMonsterPrefab(), holder.getGameObjectFromArena((int)mdata.type, indexMonsterContener).transform);
-        MonsterScript mscript = monsterObj.GetComponent<MonsterScript>();
-
-        MonsterStaticScript.SetStatsMonster(mscript, mdata);
+        if (ScoreInstance.instance.nbCurrentMonster[(int)mdata.type] >= VariableHolder.MAX_MONSTER_ARENA) { return; }
+        MonsterStaticScript.InstantiateMonster(mdata);
     }
-
     private void SpawnMonsterInArena(TypeMonster type, int level, int indexArena)
     {
-        const int indexMonsterContener = 2;
         MonsterData mdata = new MonsterData(level, type, randomPositionArena(indexArena));
-
-        GameObject monsterObj = Instantiate(holder.getMonsterPrefab(), holder.getGameObjectFromArena(indexArena, indexMonsterContener).transform);
-        MonsterScript mscript = monsterObj.GetComponent<MonsterScript>();
-
-        MonsterStaticScript.SetStatsMonster(mscript, mdata);
+        SpawnMonsterInArena(mdata);
     }
+    private void SpawnEggInArena(MonsterData edata)
+    {
+        if (ScoreInstance.instance.nbCurrentMonster[(int)edata.type] >= VariableHolder.MAX_MONSTER_ARENA) { return; }
+        MonsterStaticScript.InstantiateEgg(edata);
+    }
+    private void SpawnEggInArena(TypeMonster type, int level, int indexArena)
+    {
+        MonsterData edata = new MonsterData(level, type, randomPositionArena(indexArena));
+        edata.asHatched = false;
+
+        SpawnEggInArena(edata);
+    }
+
+    // Private Hatch Spawn
+    private IEnumerator HatchEgg(EggScript eScript, float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        MonsterData data = eScript.data;
+        data.asHatched = true;
+
+        MonsterStaticScript.DeleteEgg(eScript);
+        SpawnMonsterInArena(data);
+    }
+
 
     // Private logic methodes:
     private float[] randomPositionArena(int index)
     {
-        Transform arenaTransform = holder.getGameObjectFromArena(index, 1).transform;
+        Transform arenaTransform = prefFolder.getGameObjectFromArena(index, 1).transform;
         Vector2 maxPos = arenaTransform.position + arenaTransform.localScale / 2;
         Vector2 minPos = arenaTransform.position - arenaTransform.localScale / 2;
 
@@ -86,5 +100,17 @@ public class SpawnManager : MonoBehaviour
         float randomY = Random.Range(minPos.y, maxPos.y);
 
         return new float[] { randomX, randomY };
+    }
+    private void ClickOnEgg(EggScript eScript)
+    {
+        if (eScript.numberOfTap + 1 > eScript.data.level) { return; }
+
+        eScript.numberOfTap++;
+        float timeAnim = MonsterStaticScript.AnimAndGetTime(eScript);
+
+        if (eScript.numberOfTap == eScript.data.level)
+        {
+            StartCoroutine(HatchEgg(eScript, timeAnim));
+        }
     }
 }

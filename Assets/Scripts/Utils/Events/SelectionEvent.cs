@@ -15,15 +15,15 @@ public class SelectionEvent : MonoBehaviour
 
     //MONSTER EVENTS
     public event Action<MonsterScript> onSelectionMonster;
-    public void SelectionMonster(MonsterScript monsterStats)
+    public void SelectionMonster(MonsterScript monsterScript)
     {
-        onSelectionMonster?.Invoke(monsterStats);
+        onSelectionMonster?.Invoke(monsterScript);
     }
 
     public event Action<MonsterScript, int, bool> onSetDragMonster;
-    public void SetDragMonster(MonsterScript monsterStats, int id, bool isAdded)
+    public void SetDragMonster(MonsterScript monsterScript, int id, bool isAdded)
     {
-        onSetDragMonster?.Invoke(monsterStats, id, isAdded);
+        onSetDragMonster?.Invoke(monsterScript, id, isAdded);
     }
 
     public event Action<Vector2, int> onDragMonster;
@@ -32,6 +32,12 @@ public class SelectionEvent : MonoBehaviour
         onDragMonster?.Invoke(newPosition, id);
     }
 
+    //EGG EVENT
+    public event Action<EggScript> onClickEgg;
+    public void ClickEgg(EggScript eggScript)
+    {
+        onClickEgg?.Invoke(eggScript);
+    }
 
     //BACK GROUND EVENTS
     public event Action<int, bool> onSetDragBackground;

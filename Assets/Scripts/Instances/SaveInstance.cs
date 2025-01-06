@@ -28,6 +28,7 @@ public class SaveInstance : MonoBehaviour
             saveAll();
         }
     }
+    
     private void OnApplicationQuit()
     {
         saveAll();
@@ -43,7 +44,6 @@ public class SaveInstance : MonoBehaviour
 
     public void loadScenePrincipal()
     {
-        //WILL NEED TO BE SAVED AND LOAD
         EnumVersion version = VersionInstance.instance.Load();
 
         if (isLoad)

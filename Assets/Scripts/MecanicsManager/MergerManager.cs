@@ -45,19 +45,4 @@ public class MergerManager : MonoBehaviour
         MonsterStaticScript.Upgrade(monster1);
         MonsterStaticScript.DeleteMonster(monster2);
     }
-   
-
-    //OLD METHODE TO SELECT MONSTER (might use it later)
-    /* private void newSelectionMonster(MonsterScript monsterScript)
-     {
-         if (monsterScript == selectionMonsters[0])
-             return;
-
-         selectionMonsters[1]?.setMonsterSelected(false);
-
-         selectionMonsters[1] = selectionMonsters[0];
-         selectionMonsters[0] = monsterScript;
-
-         selectionMonsters[0]?.setMonsterSelected(true);
-     }*/
 }

@@ -8,7 +8,10 @@ public class ScoreInstance : MonoBehaviour
     public static ScoreInstance instance = null;
 
     public int currency;
-    public List<MonsterData>[] saveableMonsterDatas;
+
+    // Monster information:
+    public List<MonsterData> saveableMonsterDatas;
+    public int[] nbCurrentMonster; // NOT SAVED
 
 
     private void Awake()
@@ -48,11 +51,11 @@ public class ScoreInstance : MonoBehaviour
         return enoughtCurrency;
     }
 
-   
+
     //SAVE METHODE:
     public void Save()
     {
-        saveableMonsterDatas = MonsterStaticScript.getMonsterDataFormWorld();
+        saveableMonsterDatas = PoolSystem.instance.getDataMonster();
         SaveSystem.saveScore(instance);
     }
 
@@ -76,17 +79,13 @@ public class ScoreInstance : MonoBehaviour
     {
         currency = 100;
 
-        saveableMonsterDatas = new List<MonsterData>[5];
-        saveableMonsterDatas[0] = new List<MonsterData>();
-        saveableMonsterDatas[1] = new List<MonsterData>();
-        saveableMonsterDatas[2] = new List<MonsterData>();
-        saveableMonsterDatas[3] = new List<MonsterData>();
-        saveableMonsterDatas[4] = new List<MonsterData>();
+        saveableMonsterDatas = new List<MonsterData>();
+        nbCurrentMonster = new int[5];
     }
     public void loadDevelloperMode()
     {
         currency = 1000000;
-        
+
     }
 
     /*
@@ -98,12 +97,10 @@ public class ScoreInstance : MonoBehaviour
 
         currency = data.s_currency;
 
-        saveableMonsterDatas = new List<MonsterData>[5];
-        saveableMonsterDatas[0] = data.dataArena_1;
-        saveableMonsterDatas[1] = data.dataArena_2;
-        saveableMonsterDatas[2] = data.dataArena_3;
-        saveableMonsterDatas[3] = data.dataArena_4;
-        saveableMonsterDatas[4] = data.dataArena_final;
+        saveableMonsterDatas = data.monsterDatas;
+
+        //Not saveable variable:
+        nbCurrentMonster = new int[5];
     }
 
 }

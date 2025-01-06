@@ -15,6 +15,7 @@ public class Finger
     public EnumClikable typeClick;
     public Vector2 lastPos;
     public MonsterScript monsterSelected;
+    public EggScript eggClicked;
 
     public Finger(int newId, Vector2 screenPos)
     {
@@ -29,7 +30,8 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 {
     [SerializeField] private TextMeshProUGUI log;
 
-    private const string TAG_CLICK = "Clickable";
+    private const string TAG_MONSTER = "MonsterTag";
+    private const string TAG_EGG = "EggTag";
     private const string TAG_BACK = "Background";
     private const int MAX_FINGERS = 3;
     private float DRAG_SENSIBILITY = 1.5f;
@@ -51,16 +53,24 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
         RaycastHit2D[] hits = GetRaycast(eventData);
 
-        Collider2D colliderClick = GetFirstClickable(hits);
-        Collider2D colliderBack = GetFirstBack(hits);
+        Collider2D colliderMonster = GetFirstColliderTag(hits, TAG_MONSTER);
+        Collider2D colliderEgg = GetFirstColliderTag(hits, TAG_EGG);
+        Collider2D colliderBack = GetFirstColliderTag(hits, TAG_BACK);
         Finger newFingerPressed = new Finger(eventData.pointerId, eventData.position);
 
-        if (colliderClick != null)
+        if (colliderMonster != null)
         {
-            MonsterScript lastMonsterScript = colliderClick.gameObject.GetComponent<MonsterScript>();
+            MonsterScript lastMonsterScript = colliderMonster.gameObject.GetComponent<MonsterScript>();
 
             newFingerPressed.monsterSelected = lastMonsterScript;
             newFingerPressed.typeClick = EnumClikable.Monster;
+        }
+        else if(colliderEgg != null)
+        {
+            EggScript lastEggScript = colliderEgg.gameObject.GetComponent<EggScript>();
+
+            newFingerPressed.eggClicked = lastEggScript;
+            newFingerPressed.typeClick = EnumClikable.Egg;
         }
         else if (colliderBack != null)
         {
@@ -90,6 +100,7 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                 //DRAG THE MONSTER:
                 instance.DragMonster(eventData.position, fingerDown.id);
                 break;
+
             case EnumClikable.Background:
                 //MOVE THE BACKGROUND (CAMERA)
                 instance.DragBackground(fingerDown.id);
@@ -120,6 +131,12 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                 //DRAG MONSTER (end)
                 else
                     instance.SetDragMonster(fingerUp.monsterSelected, fingerUp.id, false);
+                break;
+
+            case EnumClikable.Egg:
+                //CLICK EGG
+                if (!fingerUp.isDrag)
+                    instance.ClickEgg(fingerUp.eggClicked);
                 break;
 
             case EnumClikable.Background:
@@ -162,23 +179,13 @@ public class SelectionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         return Physics2D.RaycastAll(mousePos2D, Vector2.zero);
     }
 
-    private Collider2D GetFirstClickable(RaycastHit2D[] raycastHits)
+    private Collider2D GetFirstColliderTag(RaycastHit2D[] raycastHits, string tagName)
     {
         foreach (RaycastHit2D item in raycastHits)
         {
-            if (item.collider != null && item.collider.gameObject.tag == TAG_CLICK)
+            if (item.collider != null && item.collider.gameObject.tag == tagName)
                 return item.collider;
 
-        }
-        return null;
-    }
-
-    private Collider2D GetFirstBack(RaycastHit2D[] raycastHits)
-    {
-        foreach (RaycastHit2D item in raycastHits)
-        {
-            if (item.collider != null && item.collider.gameObject.tag == TAG_BACK)
-                return item.collider;
         }
         return null;
     }
